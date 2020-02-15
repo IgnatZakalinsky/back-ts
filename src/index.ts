@@ -1,6 +1,7 @@
 import express, {Request, Response, NextFunction} from 'express';
 import cors from 'cors';
 import bodyParser from "body-parser";
+import mongoose from 'mongoose';
 
 const app = express();
 
@@ -44,6 +45,18 @@ someRouter.get('/y', (req: Request, res: Response) => {
 app.use('/x', someRouter);
 
 ////////////////////////////////////////////////////////////////////////////////
-app.listen(process.env.PORT, () => {
-    console.log('Neko-back listening on port: ' + process.env.PORT);
-});
+mongoose.connect(
+    'mongodb+srv://ai73aaa:1qazxcvBG@neko0-iwojt.mongodb.net/nekobd?retryWrites=true&w=majority',
+    {useNewUrlParser: true, useUnifiedTopology: true}
+    )
+    .then(() => {
+        console.log('MongoDB connected successfully');
+
+        //start
+        app.listen(process.env.PORT, () => {
+            console.log('Neko-back listening on port: ' + process.env.PORT);
+        });
+    })
+    .catch(e => console.log('MongoDB connection error: ' + e));
+
+///////////////////////////////////////////////////////////

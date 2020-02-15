@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const app = express_1.default();
 //////////////////////////////////////////////////////////////////////
 app.use(cors_1.default());
@@ -40,7 +41,14 @@ someRouter.get('/y', (req, res) => {
 });
 app.use('/x', someRouter);
 ////////////////////////////////////////////////////////////////////////////////
-app.listen(process.env.PORT, () => {
-    console.log('Neko-back listening on port: ' + process.env.PORT);
-});
+mongoose_1.default.connect('mongodb+srv://ai73aaa:1qazxcvBG@neko0-iwojt.mongodb.net/nekobd?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+    console.log('MongoDB connected successfully');
+    //start
+    app.listen(process.env.PORT, () => {
+        console.log('Neko-back listening on port: ' + process.env.PORT);
+    });
+})
+    .catch(e => console.log('MongoDB connection error: ' + e));
+///////////////////////////////////////////////////////////
 //# sourceMappingURL=index.js.map
