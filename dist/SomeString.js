@@ -19,5 +19,5 @@ const SomeStringSchema = new mongoose_1.Schema({
         updatedAt: 'updated',
     },
 });
-exports.default = mongoose_1.default.model('someString', SomeStringSchema);
+exports.default = mongoose_1.default.model('somestring', SomeStringSchema);
 //# sourceMappingURL=SomeString.js.map
