@@ -2,6 +2,7 @@ import express, {Request, Response, NextFunction} from 'express';
 import cors from 'cors';
 import bodyParser from "body-parser";
 import mongoose from 'mongoose';
+import SomeString, {ISomeString} from "./SomeString";
 
 const app = express();
 
@@ -33,12 +34,23 @@ const fakeState = {
 ////////////////////////////////////////////////////////////////////////////////
 const someRouter = express.Router();
 
-someRouter.get('/y', (req: Request, res: Response) => {
-    if (req.query.y !== '1') res.status(266).json({z: 'idi nah!'});
+someRouter.get('/y', async (req: Request, res: Response) => {
+    if (req.query.y !== '1') {
+        res.status(266).json({z: 'idi nah!'});
+    }
 
     else {
         fakeState.counter += 1;
-        res.status(200).json({z: req.query, count: fakeState.counter})
+
+        try {
+            const someString: ISomeString = await SomeString.create({str: fakeState.counter});
+
+            res.status(200).json({z: req.query, count: fakeState.counter, someString})
+
+        } catch (e) {
+            res.status(200).json({z: req.query, count: fakeState.counter, e})
+        }
+
     }
 });
 

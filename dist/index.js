@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const SomeString_1 = __importDefault(require("./SomeString"));
 const app = express_1.default();
 //////////////////////////////////////////////////////////////////////
 app.use(cors_1.default());
@@ -31,14 +41,21 @@ const fakeState = {
 };
 ////////////////////////////////////////////////////////////////////////////////
 const someRouter = express_1.default.Router();
-someRouter.get('/y', (req, res) => {
-    if (req.query.y !== '1')
+someRouter.get('/y', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.query.y !== '1') {
         res.status(266).json({ z: 'idi nah!' });
+    }
     else {
         fakeState.counter += 1;
-        res.status(200).json({ z: req.query, count: fakeState.counter });
+        try {
+            const someString = yield SomeString_1.default.create({ str: fakeState.counter });
+            res.status(200).json({ z: req.query, count: fakeState.counter, someString });
+        }
+        catch (e) {
+            res.status(200).json({ z: req.query, count: fakeState.counter, e });
+        }
     }
-});
+}));
 app.use('/x', someRouter);
 ////////////////////////////////////////////////////////////////////////////////
 mongoose_1.default.connect('mongodb+srv://ai73aaa:1qazxcvBG@neko0-iwojt.mongodb.net/nekobd?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
