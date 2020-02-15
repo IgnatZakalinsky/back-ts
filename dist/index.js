@@ -48,8 +48,12 @@ someRouter.get('/y', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     else {
         fakeState.counter += 1;
         try {
-            const someString = yield SomeString_1.default.create({ str: fakeState.counter });
-            res.status(200).json({ z: req.query, count: fakeState.counter, someString });
+            // const someString: ISomeString = await SomeString.create({str: fakeState.counter});
+            const someStrings = yield SomeString_1.default.find();
+            const someString = yield SomeString_1.default
+                .findByIdAndUpdate(someStrings[0]._id, { str: fakeState.counter }, { new: true });
+            res.status(200)
+                .json({ z: req.query, count: fakeState.counter, someString, someStrings });
         }
         catch (e) {
             res.status(200).json({ z: req.query, count: fakeState.counter, e });

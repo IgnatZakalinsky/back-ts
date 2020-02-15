@@ -43,9 +43,13 @@ someRouter.get('/y', async (req: Request, res: Response) => {
         fakeState.counter += 1;
 
         try {
-            const someString: ISomeString = await SomeString.create({str: fakeState.counter});
+            // const someString: ISomeString = await SomeString.create({str: fakeState.counter});
+            const someStrings: ISomeString[] = await SomeString.find();
+            const someString: ISomeString | null = await SomeString
+                    .findByIdAndUpdate(someStrings[0]._id, {str: fakeState.counter}, {new: true});
 
-            res.status(200).json({z: req.query, count: fakeState.counter, someString})
+            res.status(200)
+                .json({z: req.query, count: fakeState.counter, someString, someStrings})
 
         } catch (e) {
             res.status(200).json({z: req.query, count: fakeState.counter, e})
