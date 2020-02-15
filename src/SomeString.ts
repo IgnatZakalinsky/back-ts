@@ -27,4 +27,4 @@ const SomeStringSchema: Schema = new Schema(
     }
 );
 
-export default mongoose.model<ISomeString>('somestring', SomeStringSchema);
+export default mongoose.model<ISomeString>('someString', SomeStringSchema);
