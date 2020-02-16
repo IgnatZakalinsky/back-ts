@@ -2,7 +2,7 @@ import express, {Request, Response, NextFunction} from 'express';
 import cors from 'cors';
 import bodyParser from "body-parser";
 import mongoose from 'mongoose';
-import SomeString, {ISomeString} from "./SomeString";
+import { userPost } from './controllers/userPost';
 
 const app = express();
 
@@ -27,38 +27,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 ////////////////////////////////////////////////////////////////////////////////
-const fakeState = {
-    counter: 0,
-};
+const userRouter = express.Router();
+userRouter.post('/', userPost);
+userRouter.get('/', userPost);
+app.use('/user', userRouter);
 
-////////////////////////////////////////////////////////////////////////////////
-const someRouter = express.Router();
 
-someRouter.get('/y', async (req: Request, res: Response) => {
-    if (req.query.y !== '1') {
-        res.status(266).json({z: 'idi nah!'});
-    }
-
-    else {
-        fakeState.counter += 1;
-
-        try {
-            // const someString1: ISomeString = await SomeString.create({str: fakeState.counter});
-            const someStrings: ISomeString[] = await SomeString.find();
-            const someString: ISomeString | null = await SomeString
-                    .findByIdAndUpdate(someStrings[0]._id, {str: fakeState.counter}, {new: true});
-
-            res.status(200)
-                .json({z: req.query, count: fakeState.counter, someString, someStrings})
-
-        } catch (e) {
-            res.status(200).json({z: req.query, count: fakeState.counter, e})
-        }
-
-    }
-});
-
-app.use('/x', someRouter);
 
 ////////////////////////////////////////////////////////////////////////////////
 mongoose.connect(

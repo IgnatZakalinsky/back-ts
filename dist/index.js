@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const SomeString_1 = __importDefault(require("./SomeString"));
+const userPost_1 = require("./controllers/userPost");
 const app = express_1.default();
 //////////////////////////////////////////////////////////////////////
 app.use(cors_1.default());
@@ -36,31 +27,10 @@ app.use((req, res, next) => {
     next();
 });
 ////////////////////////////////////////////////////////////////////////////////
-const fakeState = {
-    counter: 0,
-};
-////////////////////////////////////////////////////////////////////////////////
-const someRouter = express_1.default.Router();
-someRouter.get('/y', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.query.y !== '1') {
-        res.status(266).json({ z: 'idi nah!' });
-    }
-    else {
-        fakeState.counter += 1;
-        try {
-            // const someString1: ISomeString = await SomeString.create({str: fakeState.counter});
-            const someStrings = yield SomeString_1.default.find();
-            const someString = yield SomeString_1.default
-                .findByIdAndUpdate(someStrings[0]._id, { str: fakeState.counter }, { new: true });
-            res.status(200)
-                .json({ z: req.query, count: fakeState.counter, someString, someStrings });
-        }
-        catch (e) {
-            res.status(200).json({ z: req.query, count: fakeState.counter, e });
-        }
-    }
-}));
-app.use('/x', someRouter);
+const userRouter = express_1.default.Router();
+userRouter.post('/', userPost_1.userPost);
+userRouter.get('/', userPost_1.userPost);
+app.use('/user', userRouter);
 ////////////////////////////////////////////////////////////////////////////////
 mongoose_1.default.connect('mongodb+srv://ai73aaa:1qazxcvBG@neko0-iwojt.mongodb.net/nekobd?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
