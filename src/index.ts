@@ -2,7 +2,8 @@ import express, {Request, Response, NextFunction} from 'express';
 import cors from 'cors';
 import bodyParser from "body-parser";
 import mongoose from 'mongoose';
-import { userPost } from './controllers/userPost';
+import {userPost} from './controllers/userPost';
+import {userGet} from "./controllers/userGet";
 
 const app = express();
 
@@ -29,7 +30,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 ////////////////////////////////////////////////////////////////////////////////
 const userRouter = express.Router();
 userRouter.post('/', userPost);
-userRouter.get('/', userPost);
+userRouter.get('/', userGet);
 app.use('/user', userRouter);
 
 
@@ -38,7 +39,7 @@ app.use('/user', userRouter);
 mongoose.connect(
     'mongodb+srv://ai73aaa:1qazxcvBG@neko0-iwojt.mongodb.net/nekobd?retryWrites=true&w=majority',
     {useNewUrlParser: true, useUnifiedTopology: true}
-    )
+)
     .then(() => {
         console.log('MongoDB connected successfully');
 
