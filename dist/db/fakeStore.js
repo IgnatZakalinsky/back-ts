@@ -5,7 +5,7 @@ exports.store = {
     chats: [],
     addUser() {
         const id = Math.random();
-        this.users = [...this.users, { id, isSearching: true }];
+        this.users = [...this.users, { id, isSearching: true, date: new Date().toString() }];
         return id;
     },
     getChat(userId) {
@@ -16,6 +16,9 @@ exports.store = {
             this.users = this.users.filter(u => u.id !== userId);
             return { status: 'found', chatId: user.chatId };
         }
+        user.date = new Date().toString();
+        const deadTime = new Date(new Date().getTime() - (1000 * 10)).toString();
+        this.users = this.users.filter(u => u.date > deadTime);
         const filteredUsers = this.users.filter(u => u.isSearching);
         const user2 = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
         if (user === user2)
@@ -48,7 +51,7 @@ exports.store = {
             chat.user1Date = new Date().toString();
         if (userId === chat.user2Id)
             chat.user2Date = new Date().toString();
-        const deadTime = new Date(new Date().getTime() - (1000 * 60 * 5)).toString();
+        const deadTime = new Date(new Date().getTime() - (1000 * 10)).toString();
         if (chat.user1Date < deadTime || chat.user2Date < deadTime)
             chat.messages = [...chat.messages, { message: '1qaz2wsx3edc', date: new Date().toString(), userId: 0 }];
         return { status: 'ok', messages: chat.messages.filter(m => m.date > new Date(date).toString()) };
