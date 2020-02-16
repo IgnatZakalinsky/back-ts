@@ -41,7 +41,7 @@ messageRouter.post('/', messagePost_1.messagePost);
 app.use('/message', messageRouter);
 const devRouter = express_1.default.Router();
 devRouter.get('/', (req, res) => res.status(200).json(fakeStore_1.store.chats));
-app.use('/', messageRouter);
+app.use('/', devRouter);
 ////////////////////////////////////////////////////////////////////////////////
 mongoose_1.default.connect('mongodb+srv://ai73aaa:1qazxcvBG@neko0-iwojt.mongodb.net/nekobd?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {

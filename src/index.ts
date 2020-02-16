@@ -43,7 +43,7 @@ app.use('/message', messageRouter);
 
 const devRouter = express.Router();
 devRouter.get('/', (req: Request, res: Response) => res.status(200).json(store.chats));
-app.use('/', messageRouter);
+app.use('/', devRouter);
 
 ////////////////////////////////////////////////////////////////////////////////
 mongoose.connect(
