@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import mongoose from 'mongoose';
 import {userPost} from './controllers/userPost';
 import {userGet} from "./controllers/userGet";
+import {messageGet} from './controllers/messageGet';
+import {messagePost} from "./controllers/messagePost";
 
 const app = express();
 
@@ -33,7 +35,10 @@ userRouter.post('/', userPost);
 userRouter.get('/', userGet);
 app.use('/user', userRouter);
 
-
+const messageRouter = express.Router();
+messageRouter.get('/', messageGet);
+messageRouter.post('/', messagePost);
+app.use('/message', messageRouter);
 
 ////////////////////////////////////////////////////////////////////////////////
 mongoose.connect(

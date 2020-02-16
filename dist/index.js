@@ -9,6 +9,8 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const userPost_1 = require("./controllers/userPost");
 const userGet_1 = require("./controllers/userGet");
+const messageGet_1 = require("./controllers/messageGet");
+const messagePost_1 = require("./controllers/messagePost");
 const app = express_1.default();
 //////////////////////////////////////////////////////////////////////
 app.use(cors_1.default());
@@ -32,6 +34,10 @@ const userRouter = express_1.default.Router();
 userRouter.post('/', userPost_1.userPost);
 userRouter.get('/', userGet_1.userGet);
 app.use('/user', userRouter);
+const messageRouter = express_1.default.Router();
+messageRouter.get('/', messageGet_1.messageGet);
+messageRouter.post('/', messagePost_1.messagePost);
+app.use('/message', messageRouter);
 ////////////////////////////////////////////////////////////////////////////////
 mongoose_1.default.connect('mongodb+srv://ai73aaa:1qazxcvBG@neko0-iwojt.mongodb.net/nekobd?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
