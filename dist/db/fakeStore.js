@@ -37,6 +37,7 @@ exports.store = {
                 user2Date: new Date().toString(),
             }
         ];
+        this.users = this.users.filter(u => u.id !== userId);
         return { status: 'found', chatId: id };
     },
     messageGet(chatId, date, userId) {

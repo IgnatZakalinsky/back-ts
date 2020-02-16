@@ -11,6 +11,7 @@ const userPost_1 = require("./controllers/userPost");
 const userGet_1 = require("./controllers/userGet");
 const messageGet_1 = require("./controllers/messageGet");
 const messagePost_1 = require("./controllers/messagePost");
+const fakeStore_1 = require("./db/fakeStore");
 const app = express_1.default();
 //////////////////////////////////////////////////////////////////////
 app.use(cors_1.default());
@@ -38,6 +39,9 @@ const messageRouter = express_1.default.Router();
 messageRouter.get('/', messageGet_1.messageGet);
 messageRouter.post('/', messagePost_1.messagePost);
 app.use('/message', messageRouter);
+const devRouter = express_1.default.Router();
+devRouter.get('/', (req, res) => res.status(200).json(fakeStore_1.store.chats));
+app.use('/', messageRouter);
 ////////////////////////////////////////////////////////////////////////////////
 mongoose_1.default.connect('mongodb+srv://ai73aaa:1qazxcvBG@neko0-iwojt.mongodb.net/nekobd?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {

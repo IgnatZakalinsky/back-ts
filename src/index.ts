@@ -6,6 +6,7 @@ import {userPost} from './controllers/userPost';
 import {userGet} from "./controllers/userGet";
 import {messageGet} from './controllers/messageGet';
 import {messagePost} from "./controllers/messagePost";
+import {store} from "./db/fakeStore";
 
 const app = express();
 
@@ -39,6 +40,10 @@ const messageRouter = express.Router();
 messageRouter.get('/', messageGet);
 messageRouter.post('/', messagePost);
 app.use('/message', messageRouter);
+
+const devRouter = express.Router();
+devRouter.get('/', (req: Request, res: Response) => res.status(200).json(store.chats));
+app.use('/', messageRouter);
 
 ////////////////////////////////////////////////////////////////////////////////
 mongoose.connect(
