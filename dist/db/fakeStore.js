@@ -17,7 +17,7 @@ exports.store = {
             return { status: 'found', chatId: user.chatId };
         }
         user.date = new Date().toString();
-        const deadTime = new Date(new Date().getTime() - (1000 * 10)).toString();
+        const deadTime = new Date(new Date().getTime() - (1000 * 60)).toString();
         this.users = this.users.filter(u => u.date > deadTime);
         const filteredUsers = this.users.filter(u => u.isSearching);
         const user2 = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
@@ -51,10 +51,24 @@ exports.store = {
             chat.user1Date = new Date().toString();
         if (userId === chat.user2Id)
             chat.user2Date = new Date().toString();
-        const deadTime = new Date(new Date().getTime() - (1000 * 10)).toString();
-        if (chat.user1Date < deadTime || chat.user2Date < deadTime)
-            chat.messages = [...chat.messages, { message: '1qaz2wsx3edc', date: new Date().toString(), userId: 0 }];
-        return { status: 'ok', messages: chat.messages.filter(m => m.date > new Date(date).toString()) };
+        const deadTime = new Date(new Date().getTime() - (1000 * 60)).toString();
+        if (chat.user1Date < deadTime || chat.user2Date < deadTime) {
+            const find = chat.messages.find(m => m.message === '1qaz2wsx3edc');
+            if (!find) {
+                chat.messages = [
+                    ...chat.messages,
+                    { message: '1qaz2wsx3edc', date: new Date().toString(), userId: 0 }
+                ];
+                return { status: 'off', messages: chat.messages
+                        .filter(m => m.date > date) };
+            }
+        }
+        const find = chat.messages.find(m => m.message === '1qaz2wsx3edc');
+        if (!find) {
+            return { status: 'off', messages: chat.messages
+                    .filter(m => m.date > date) };
+        }
+        return { status: 'ok', messages: chat.messages.filter(m => m.date > date) };
     },
     messagePost(chatId, message, userId) {
         const chat = this.chats.find(c => c.id === chatId);
