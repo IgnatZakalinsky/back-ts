@@ -2,21 +2,21 @@ type IUser = {
     id: number;
     isSearching: boolean;
     chatId?: number;
-    date: string;
+    date: number;
 }
 type IMessage = {
     message: string;
     userId: number;
-    date: string;
+    date: number;
 }
 type IChat = {
     id: number;
     messages: IMessage[];
-    date: string;
+    date: number;
     user1Id: number;
     user2Id: number;
-    user1Date: string;
-    user2Date: string;
+    user1Date: number;
+    user2Date: number;
 
 }
 
@@ -26,7 +26,7 @@ export const store = {
 
     addUser(): number {
         const id = Math.random();
-        this.users = [...this.users, {id, isSearching: true, date: new Date().toString()}];
+        this.users = [...this.users, {id, isSearching: true, date: new Date().getTime()}];
         return id;
     },
 
@@ -40,8 +40,8 @@ export const store = {
             return {status: 'found', chatId: user.chatId};
         }
 
-        user.date = new Date().toString();
-        const deadTime = new Date(new Date().getTime() - (1000 * 60)).toString();
+        user.date = new Date().getTime();
+        const deadTime = new Date().getTime() - (1000 * 60);
         this.users = this.users.filter(u => u.date > deadTime);
 
         const filteredUsers = this.users.filter(u => u.isSearching);
@@ -58,32 +58,32 @@ export const store = {
             {
                 id,
                 messages: [],
-                date: new Date().toString(),
+                date: new Date().getTime(),
                 user1Id: user.id,
                 user2Id: user2.id,
-                user1Date: new Date().toString(),
-                user2Date: new Date().toString(),
+                user1Date: new Date().getTime(),
+                user2Date: new Date().getTime(),
             }
         ];
         this.users = this.users.filter(u => u.id !== userId);
         return {status: 'found', chatId: id};
     },
 
-    messageGet(chatId: number, date: string, userId: number): { messages: IMessage[], status: string } {
+    messageGet(chatId: number, date: number, userId: number): { messages: IMessage[], status: string } {
         const chat = this.chats.find(c => c.id === chatId);
         if (!chat) return {status: 'no chat with id=' + chatId, messages: []};
 
-        if (userId === chat.user1Id) chat.user1Date = new Date().toString();
-        if (userId === chat.user2Id) chat.user2Date = new Date().toString();
+        if (userId === chat.user1Id) chat.user1Date = new Date().getTime();
+        if (userId === chat.user2Id) chat.user2Date = new Date().getTime();
 
-        const deadTime = new Date(new Date().getTime() - (1000 * 60)).toString();
+        const deadTime = new Date().getTime() - (1000 * 60);
         if (chat.user1Date < deadTime || chat.user2Date < deadTime) {
             const find = chat.messages.find(m => m.message === '1qaz2wsx3edc');
             if (!find) {
 
                 chat.messages = [
                     ...chat.messages,
-                    {message: '1qaz2wsx3edc', date: new Date().toString(), userId: 0}
+                    {message: '1qaz2wsx3edc', date: new Date().getTime(), userId: 0}
                 ];
                 return {status: 'off', messages: chat.messages
                         .filter(m => m.date > date)};
@@ -103,7 +103,7 @@ export const store = {
         const chat = this.chats.find(c => c.id === chatId);
         if (!chat) return 'no chat with id=' + chatId;
 
-        chat.messages = [...chat.messages, {message, date: new Date().toString(), userId}];
+        chat.messages = [...chat.messages, {message, date: new Date().getTime(), userId}];
         return 'ok';
     },
 };

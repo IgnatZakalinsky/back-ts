@@ -5,7 +5,7 @@ exports.store = {
     chats: [],
     addUser() {
         const id = Math.random();
-        this.users = [...this.users, { id, isSearching: true, date: new Date().toString() }];
+        this.users = [...this.users, { id, isSearching: true, date: new Date().getTime() }];
         return id;
     },
     getChat(userId) {
@@ -16,8 +16,8 @@ exports.store = {
             this.users = this.users.filter(u => u.id !== userId);
             return { status: 'found', chatId: user.chatId };
         }
-        user.date = new Date().toString();
-        const deadTime = new Date(new Date().getTime() - (1000 * 60)).toString();
+        user.date = new Date().getTime();
+        const deadTime = new Date().getTime() - (1000 * 60);
         this.users = this.users.filter(u => u.date > deadTime);
         const filteredUsers = this.users.filter(u => u.isSearching);
         const user2 = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
@@ -33,11 +33,11 @@ exports.store = {
             {
                 id,
                 messages: [],
-                date: new Date().toString(),
+                date: new Date().getTime(),
                 user1Id: user.id,
                 user2Id: user2.id,
-                user1Date: new Date().toString(),
-                user2Date: new Date().toString(),
+                user1Date: new Date().getTime(),
+                user2Date: new Date().getTime(),
             }
         ];
         this.users = this.users.filter(u => u.id !== userId);
@@ -48,16 +48,16 @@ exports.store = {
         if (!chat)
             return { status: 'no chat with id=' + chatId, messages: [] };
         if (userId === chat.user1Id)
-            chat.user1Date = new Date().toString();
+            chat.user1Date = new Date().getTime();
         if (userId === chat.user2Id)
-            chat.user2Date = new Date().toString();
-        const deadTime = new Date(new Date().getTime() - (1000 * 60)).toString();
+            chat.user2Date = new Date().getTime();
+        const deadTime = new Date().getTime() - (1000 * 60);
         if (chat.user1Date < deadTime || chat.user2Date < deadTime) {
             const find = chat.messages.find(m => m.message === '1qaz2wsx3edc');
             if (!find) {
                 chat.messages = [
                     ...chat.messages,
-                    { message: '1qaz2wsx3edc', date: new Date().toString(), userId: 0 }
+                    { message: '1qaz2wsx3edc', date: new Date().getTime(), userId: 0 }
                 ];
                 return { status: 'off', messages: chat.messages
                         .filter(m => m.date > date) };
@@ -74,7 +74,7 @@ exports.store = {
         const chat = this.chats.find(c => c.id === chatId);
         if (!chat)
             return 'no chat with id=' + chatId;
-        chat.messages = [...chat.messages, { message, date: new Date().toString(), userId }];
+        chat.messages = [...chat.messages, { message, date: new Date().getTime(), userId }];
         return 'ok';
     },
 };
