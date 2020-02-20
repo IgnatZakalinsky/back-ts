@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const fakeStore_1 = require("../db/fakeStore");
 exports.userPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = fakeStore_1.store.addUser();
+    const id = fakeStore_1.store.addUser(req.body.sex, req.body.findSex);
     res.status(200).json({ userId: id, status: "wait" });
 });
 //# sourceMappingURL=userPost.js.map

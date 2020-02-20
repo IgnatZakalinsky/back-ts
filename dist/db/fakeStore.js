@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.store = {
     users: [],
     chats: [],
-    addUser() {
+    addUser(sex, findSex) {
         const id = Math.random();
-        this.users = [...this.users, { id, isSearching: true, date: new Date().getTime() }];
+        this.users = [...this.users, { id, isSearching: true, date: new Date().getTime(), sex, findSex }];
         return id;
     },
     getChat(userId) {
@@ -19,7 +19,27 @@ exports.store = {
         user.date = new Date().getTime();
         const deadTime = new Date().getTime() - (1000 * 60);
         this.users = this.users.filter(u => u.date > deadTime);
-        const filteredUsers = this.users.filter(u => u.isSearching);
+        const fSex = (u) => {
+            if (user.sex && user.findSex && u.sex && u.findSex) {
+                if (user.findSex[0] !== 'all' && u.findSex[0] !== 'all') {
+                    if (user.findSex.find(s => s === u.sex) && u.findSex[0] !== 'all')
+                        return true;
+                    if (u.findSex.find(s => s === user.sex) && user.findSex[0] !== 'all')
+                        return true;
+                    return !!(u.findSex.find(s => s === user.sex) && user.findSex.find(s => s === u.sex));
+                }
+                else
+                    return true;
+            }
+            else {
+                if (user.findSex && user.findSex[0] !== 'all' && !u.sex)
+                    return true;
+                if (u.findSex && u.findSex[0] !== 'all' && !user.sex)
+                    return true;
+                return !u.sex && !user.sex;
+            }
+        };
+        const filteredUsers = this.users.filter(u => u.isSearching && fSex(u));
         const user2 = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
         if (user === user2)
             return { status: 'wait', chatId: null };
@@ -59,14 +79,18 @@ exports.store = {
                     ...chat.messages,
                     { message: '1qaz2wsx3edc', date: new Date().getTime(), userId: 0 }
                 ];
-                return { status: 'off', messages: chat.messages
-                        .filter(m => m.date > date) };
+                return {
+                    status: 'off', messages: chat.messages
+                        .filter(m => m.date > date)
+                };
             }
         }
         const find = chat.messages.find(m => m.message === '1qaz2wsx3edc');
         if (!find) {
-            return { status: 'off', messages: chat.messages
-                    .filter(m => m.date > date) };
+            return {
+                status: 'off', messages: chat.messages
+                    .filter(m => m.date > date)
+            };
         }
         return { status: 'ok', messages: chat.messages.filter(m => m.date > date) };
     },
