@@ -109,14 +109,10 @@ export const store = {
         }
 
         const find = chat.messages.find(m => m.message === '1qaz2wsx3edc');
-        if (!find) {
-            return {
-                status: 'off', messages: chat.messages
-                    .filter(m => m.date > date)
-            };
-        }
+        let status = 'ok';
+        if (find) status = 'off';
 
-        return {status: 'ok', messages: chat.messages.filter(m => m.date > date)};
+        return {status, messages: chat.messages.filter(m => m.date > date)};
     },
 
     messagePost(chatId: number, message: string, userId: number): string {
