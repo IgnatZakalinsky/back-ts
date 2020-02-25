@@ -42,7 +42,8 @@ messageRouter.post('/', messagePost);
 app.use('/message', messageRouter);
 
 const devRouter = express.Router();
-devRouter.get('/', (req: Request, res: Response) => res.status(200).json(store.chats));
+devRouter.get('/', (req: Request, res: Response) => res.status(200)
+    .json({chats: store.chats, users: store.users}));
 app.use('/', devRouter);
 
 ////////////////////////////////////////////////////////////////////////////////

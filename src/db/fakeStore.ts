@@ -56,7 +56,7 @@ export const store = {
         };
         const filteredUsers = this.users.filter(u => u.isSearching && fSex(u));
         const user2 = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
-        if (user === user2) return {status: 'wait', chatId: null};
+        if (!user2 || user === user2) return {status: 'wait', chatId: null};
 
         user.isSearching = false;
         user2.isSearching = false;
