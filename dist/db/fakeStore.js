@@ -20,24 +20,13 @@ exports.store = {
         const deadTime = new Date().getTime() - (1000 * 60);
         this.users = this.users.filter(u => u.date > deadTime);
         const fSex = (u) => {
-            console.log('[', user.sex, user.findSex, '|', u.sex, u.findSex, ']');
-            if (user.sex && user.findSex && u.sex && u.findSex) {
-                if (user.findSex[0] !== 'all' && u.findSex[0] !== 'all') {
-                    if (user.findSex.find(s => s === u.sex) && u.findSex[0] !== 'all')
-                        return true;
-                    if (u.findSex.find(s => s === user.sex) && user.findSex[0] !== 'all')
-                        return true;
-                    return !!(u.findSex.find(s => s === user.sex) && user.findSex.find(s => s === u.sex));
-                }
-                else
+            if (!user.findSex || user.findSex[0] === 'all') {
+                if (!u.findSex || u.findSex[0] === 'all')
                     return true;
+                return !!(user.sex && u.findSex.find(s => s === user.sex));
             }
             else {
-                if (user.findSex && user.findSex[0] !== 'all' && !u.sex)
-                    return true;
-                if (u.findSex && u.findSex[0] !== 'all' && !user.sex)
-                    return true;
-                return !u.sex && !user.sex;
+                return !!(u.sex && user.findSex.find(s => s === u.sex));
             }
         };
         const filteredUsers = this.users.filter(u => u.isSearching && fSex(u));
