@@ -47,6 +47,7 @@ export const store = {
         this.users = this.users.filter(u => u.date > deadTime);
 
         const fSex = (u: IUser): boolean => {
+            console.log('[', user.sex, user.findSex, '|', u.sex, u.findSex, ']');
             if (user.sex && user.findSex && u.sex && u.findSex) {
                 if (user.findSex[0] !== 'all' && u.findSex[0] !== 'all') {
                     if (user.findSex.find(s => s === u.sex) && u.findSex[0] !== 'all') return true;
@@ -82,6 +83,7 @@ export const store = {
             }
         ];
         this.users = this.users.filter(u => u.id !== userId);
+        console.log('[', user.sex, user.findSex, '|', user2.sex, user2.findSex, ']');
         return {status: 'found', chatId: id};
     },
 
